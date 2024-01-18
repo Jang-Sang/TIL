@@ -1,0 +1,134 @@
+signin 페이지 생성
+-> input 태그 2개 생성 name,password
+-> const mutate 생성, axios 주소 추가
+-> onSubmit 추가
+	-> const email 생성
+	-> const password 생성
+	-> await mutateAsync 생성
+
+
+App.jsx
+
+function App() {
+  return (
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider
+          router={createBrowserRouter([
+            {
+              path: "/",
+              element: <SignUp />,
+            },
+            {
+              path: "/sign-in",
+              element: <SignIn />,
+            },
+            {
+              path: "/todo",
+              element: <Todo />,
+            },
+          ])}
+        />
+      </QueryClientProvider>
+  );
+}
+
+
+Todo 페이지 생성
+기본적인 로직 생성
+
+signin, signup 페이지 버튼 생성
+
+ const { isError, isSuccess, isPending, mutate, mutateAsync } = useMutation({  추가
+
+const response = mutate{{
+	email,
+	pw: password,
+}};
+
+    localStorage.setItem("access_token", response.data.token);
+    navigate("/todo");
+  };
+로컬 스토리지 생성
+
+  retryDelay: 1000 * 3, 딜레이 생성, 병목현상 해결을 위한 추가
+
+
+todo.jsx 추가작성
+
+const Todo = () => {
+	const {data} = useQuery{{
+		queryKey: ["todo"]
+		queryFn: () => 
+			axios.post("https://topdragon.co.kr/todo", data, {
+        		withCredentials: true,
+        		headers: {
+          		Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+       			 },
+     		 }),
+
+console.log(data);
+
+  return (
+    <div>
+      <button type="button" onClick={() => navigation("/")}>
+        SignUp
+      </button>
+	</div>
+);
+};
+export default Todo;
+
+hooks/getTodo 작성
+추가
+  const { mutateAsync } = useMutation({
+    mutationFn: (data) =>
+      axios.post("https://topdragon.co.kr/todo", data, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }),
+
+Devtools 추가
+yarn add @tanstack/react-query-devtools
+
+get-todo.js
+refetchOnMount: false 추가
+
+App.jsx
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => {
+      console.log(error, "error");
+      // global error handling
+    },
+  }),
+});
+queryCache 추가
+
+todo.jsx
+    useEffect(() => {
+      toast.message(error.response.message)
+    },[error])
+에러메세지 추가
+확인후 주석처리
+
+낙관적 업데이트
+onMutate - 데이터의 성공과 실패에 상관없이 일단 데이터가 보내졌을 때의 행동을 지정해준다.
+typescript에서 suspense 옵션을 걸지 않는 이상 데이터에 !를 붙여서는 안된다. -!는 무조건 성공했다는 조건하에 사용
+react-query에서는 언젠가는 !를 사용할 순간이 올텐데 그 때는 확실하다는 증거를 위해서 useSuspense를 써줘서 증거를 준다.
+
+get-todo,js
+useQuery를 useSuspensequery로 수정한다.
+
+todo.jsx
+loading 추가
+
+App.jsx 
+<Suspense></Suspense> 추가
+todo에 건 loading을 App.jsx에 추가
+
+
+
+추가 참고 사이트 
+https://velog.io/@dev_jazziron/useQuery

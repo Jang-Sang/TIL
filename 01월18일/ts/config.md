@@ -30,6 +30,7 @@ https://yamoo9.gitbook.io/typescript/cli-env/tsconfig
 
     그 외의 주요옵션
 
+
     {
         "compilerOptions": {
             "target": "es5", // 'es3', 'es5', 'es2015', 'es2016', 'es2017','es2018', 'esnext' 가능
@@ -53,5 +54,6 @@ https://yamoo9.gitbook.io/typescript/cli-env/tsconfig
             "noUnusedParameters": true, //쓰지않는 파라미터 있으면 에러내기
             "noImplicitReturns": true, //함수에서 return 빼먹으면 에러내기
             "noFallthroughCasesInSwitch": true, //switch문 이상하면 에러내기
+            "paths" : 상대 경로를 절대경로로 만들어서 import하기 위해서 설정
         }
     }
